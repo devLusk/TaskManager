@@ -1,13 +1,13 @@
 import javax.xml.stream.events.Comment;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 public class TaskList {
-    // adicionar tarefas, remover tarefas, marcar como concluídas, listar tarefas.
-
+    static int nextId = 0;
     static ArrayList<Task> tasks = new ArrayList<>();
 
-    public static void addTask(int taskId, String taskName, String comments, Boolean done) {
-        Task newTask = new Task(taskId, taskName, comments, done);
+    public static void addTask(String taskName, String comments) {
+        Task newTask = new Task(nextId++, taskName, comments, false);
         tasks.add(newTask);
     }
 
@@ -15,7 +15,7 @@ public class TaskList {
         for (int i = 0; i < tasks.size(); i++) {
             Task task = tasks.get(i);
 
-            if (task.getTaskId() == taskId){
+            if (task.getTaskId() == taskId) {
                 tasks.remove(i);
             }
         }
@@ -29,7 +29,7 @@ public class TaskList {
     }
 
     public static void markAsDone(int taskId) {
-        for (int i = 0; i < tasks.size(); i++){
+        for (int i = 0; i < tasks.size(); i++) {
             Task task = tasks.get(i);
 
             if (task.getTaskId() == taskId) {
@@ -39,14 +39,48 @@ public class TaskList {
     }
 
     public static void main(String[] args) {
-        addTask(1, "Start Coding", "Start at 08am", false);
-        addTask(2, "Stop Coding", "Stop at 08pm", false);
-        addTask(3, "Get a girlfriend", "Start Trying", false);
+        Scanner scr = new Scanner(System.in);
 
-        removeTask(3);
+        System.out.println("TASK MANAGER \n");
+        System.out.println("1. Add a new task");
+        System.out.println("2. Remove a task");
+        System.out.println("3. List all tasks");
+        System.out.println("4. Mark as done \n");
 
-        markAsDone(2);
+        System.out.print("Enter your choose: ");
+        int choose = Integer.parseInt(scr.nextLine());
 
-        listTask();
+        switch (choose) {
+            case 1: {
+                System.out.println("Enter a name: ");
+                String taskName = scr.nextLine();
+
+                System.out.println("Enter the comments: ");
+                String comments = scr.nextLine();
+
+                addTask(taskName, comments);
+                break;
+            }
+            case 2: {
+                System.out.print("Enter the task ID: ");
+                int taskId = scr.nextInt();
+
+                removeTask(taskId);
+                break;
+            }
+            case 3: {
+                System.out.println("Listing all tasks...");
+
+                listTask();
+                break;
+            }
+            case 4: {
+                System.out.print("Enter the task that you want to mark as done: ");
+                int taskId = scr.nextInt();
+
+                markAsDone(taskId);
+                break;
+            }
+        }
     }
 }
